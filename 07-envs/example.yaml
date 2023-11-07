@@ -18,6 +18,34 @@ data:
 ---
 
 apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: proxy-config-map
+  namespace: app
+data:
+  TZ: Asia/Baghdad
+
+
+---
+
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: proxy-secret
+  namespace: app
+type: Opaque
+data:
+  rootUser: NGd0c3M=   # Base64-encoded value of "4gtss"
+  rootHost: JQ==      # Base64-encoded value of "%"
+  rootPassword: NEdUU1MtcGFzcw==  # Base64-encoded value of "4GTSS-pass"
+
+
+---
+
+
+
+apiVersion: v1
 kind: Pod
 metadata:
   name: nginx-pod
@@ -28,6 +56,14 @@ spec:
     image: nginx:1.21.6
     ports:
         - containerPort: 80
+    env:
+      - name: TZ
+        value: Asia/Baghdad
+    envFrom:
+      - configMapRef:
+          name: proxy-config-map
+      - secretRef:
+            name: proxy-secret
     resources: {}
     volumeMounts:
     - name: nginx-config-volume
