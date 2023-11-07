@@ -28,6 +28,7 @@ spec:
     image: nginx:1.21.6
     ports:
         - containerPort: 80
+    resources: {}
     volumeMounts:
     - name: nginx-config-volume
       mountPath: /usr/share/nginx/html

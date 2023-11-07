@@ -18,5 +18,5 @@ spec:
     image: nginx:1.21.6
     ports:
         - containerPort: 80
-  
+    resources: {}
 #kubectl label nodes worker2 node=worker2

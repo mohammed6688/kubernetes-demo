@@ -14,5 +14,5 @@ spec:
     image: nginx:1.21.6
     ports:
         - containerPort: 80
-  
+    resources: {}
 #kubectl taint nodes worker2 node=worker2:NoSchedule

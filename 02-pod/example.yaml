@@ -9,6 +9,7 @@ spec:
     image: nginx:1.21.6
     ports:
         - containerPort: 80
+    resources: {}
 
 
 ---
@@ -24,3 +25,4 @@ spec:
     image: prom/prometheus:v2.47.1
     ports:
         - containerPort: 9090
+    resources: {}
