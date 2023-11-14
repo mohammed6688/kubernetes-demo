@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  namespace: app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx-container
+        image: nginx:1.21.6
+        ports:
+          - containerPort: 80
+        resources: {}
+        volumeMounts:
+          - name: app-volume
+            mountPath: /workdir/logs
+      - name: prometheus-container
+        image: prom/prometheus:v2.47.1
+        ports:
+          - containerPort: 9090
+        resources: {}
+        volumeMounts:
+          - name: app-volume
+            mountPath: /workdir/logs
+      volumes:
+          - name: app-volume
+            persistentVolumeClaim:
+              claimName: log-volume
+
+---
+
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: log-volume
+  namespace: app
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: "2Gi"
+
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: my-local-pv
+spec:
+  capacity:
+    storage: 2Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/var/data"
+  persistentVolumeReclaimPolicy: Retain
